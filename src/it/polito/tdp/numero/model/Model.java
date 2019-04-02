@@ -1,6 +1,8 @@
 package it.polito.tdp.numero.model;
 
 import java.security.InvalidParameterException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Model {
 	
@@ -10,9 +12,11 @@ public class Model {
 	private int segreto;
 	private int tentativiFatti;
 	private boolean inGioco = false;
+	private List<Integer> tentativi;
 	
 	public Model() {
 		inGioco=false;
+		tentativi = new LinkedList<Integer>();
 	}
 	
 	public void newGame() {
@@ -22,6 +26,7 @@ public class Model {
 		this.segreto = (int) (Math.random() * NMAX) + 1;
 		this.tentativiFatti = 0;
 		inGioco=true;
+		this.tentativi= new LinkedList<Integer>();
 	}
 	
 	public int tentativo(int t) {
@@ -35,9 +40,11 @@ public class Model {
 		}
 		//gestisci tentativo
 		this.tentativiFatti++;
+		tentativi.add(t);
 		if(tentativiFatti==this.TMAX) {
 			//la partita è finita perchè ho esaurito i tentativi
 			this.inGioco=false;
+			
 		}
 		if(t==this.segreto) {
 			//ho vinto
@@ -52,7 +59,11 @@ public class Model {
 	}
 	
 	public boolean tentativoValido(int t) {
+		
 		if(t<1 || t>NMAX) {
+			return false;
+		}
+		else if(tentativi.contains(t)) {
 			return false;
 		}
 		else {
